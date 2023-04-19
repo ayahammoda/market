@@ -2,6 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:market1/screens/login_screen.dart';
 import 'package:market1/screens/signup_screen.dart';
+import 'admin/addproduct.dart';
 import 'firebase_options.dart';
 
 main()
@@ -21,6 +22,7 @@ class MyApp extends StatelessWidget {
        initialRoute: loginscreen.id,
       routes:
        {
+         AddProduct.id:(context)=> AddProduct() ,
         loginscreen.id: (context) => loginscreen(),
          signupscreen.id: (context) => signupscreen(),
 

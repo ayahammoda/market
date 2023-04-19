@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import '../color.dart';
 
 class textfiled extends StatelessWidget {
-  final String hint;
-  final IconData icon;
+
+   String hint;
+   IconData icon;
+   Function onClick;
   String _errormassage ( String str)
   {
     switch(hint)
@@ -14,7 +16,7 @@ class textfiled extends StatelessWidget {
     }
     return hint;
   }
-  textfiled({required this.hint,required this.icon});
+  textfiled(   { required this.hint ,required this.icon,  required this.onClick , });
   @override
   Widget build(BuildContext context) {
     return Padding(
