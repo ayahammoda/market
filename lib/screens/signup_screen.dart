@@ -44,15 +44,15 @@ class signupscreen extends StatelessWidget {
             SizedBox(
               height: height*0.07,
             ),
-            textfiled(hint: 'enter your name ', icon: Icons.perm_identity),
+            textfiled(hint: 'enter your name ', icon: Icons.perm_identity, onClick: (){},),
             SizedBox(
               height: height*0.001,
             ),
-            textfiled( icon: Icons.email, hint: 'enter your email'),
+            textfiled( icon: Icons.email, hint: 'enter your email',onClick: (){},),
             SizedBox(
               height: height*0.001,
             ),
-            textfiled(hint: 'enter your password ', icon: Icons.lock),
+            textfiled(hint: 'enter your password ', icon: Icons.lock,onClick: (){},),
             SizedBox(
               height: height*0.02,
             ),
