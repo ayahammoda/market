@@ -23,7 +23,7 @@ class _CategoryCHState extends State<CategoryCH> {
             child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  textfiled(
+                  AppTextFiled(
                     onClick: (value) {
                       _items = value;
                     },
