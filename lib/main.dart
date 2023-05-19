@@ -1,12 +1,12 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:market1/admin/adminhome.dart';
 import 'package:market1/screens/login_screen.dart';
 import 'package:market1/screens/signup_screen.dart';
-import 'admin/addproduct.dart';
-import 'firebase_options.dart';
+import 'package:market1/admin/addProduct.dart';
 
-main()
-async{
+import 'firebase_options.dart';
+main() async{
 WidgetsFlutterBinding.ensureInitialized();
  await Firebase.initializeApp(
 options: DefaultFirebaseOptions.currentPlatform,
@@ -19,14 +19,13 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-       initialRoute: loginscreen.id,
+       initialRoute:adminHome.id,
       routes:
        {
-         AddProduct.id:(context)=> AddProduct() ,
+         adminHome.id:(context)=> const adminHome(),
+         addProduct.id:(context)=> const addProduct() ,
         loginscreen.id: (context) => loginscreen(),
          signupscreen.id: (context) => signupscreen(),
-
-
        },
     );
     throw UnimplementedError();

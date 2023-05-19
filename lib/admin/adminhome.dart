@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:market1/admin/addproduct.dart';
-import 'package:market1/admin/data.dart';
-import 'package:market1/main.dart';
+import 'package:market1/admin/movePages.dart';
+
 class adminHome extends StatefulWidget {
-  static String id='homePabeAdmin';
+  static String id='homePageAdmin';
   const adminHome({Key? key}) : super(key: key);
 
   @override
@@ -48,4 +47,5 @@ Data(),
   Container(),
   Container(),
   Container(),
+
 ];
