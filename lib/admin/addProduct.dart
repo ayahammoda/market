@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/material/dropdown.dart';
-
+import'../Widget/textfield2.dart';
 
 class addProduct extends StatefulWidget {
   static String id = 'AddProduct03';
@@ -106,36 +106,6 @@ class _addProductState extends State<addProduct> {
 
     ) ;
   }
-Widget myTextField({required Function onclick ,required String labelText,String ?hintText}){
-    return  TextField(
-        onTap: onclick(),
-        decoration: InputDecoration(
-          fillColor: Color(0xFFC894D3),
-          filled: true,
-          labelText: labelText ,
-          labelStyle: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-          hintText: hintText,
-          enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(100),
-              borderSide: BorderSide(
-                  color: Colors.black87
-              )
-          ),
-          focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(100),
-              borderSide: BorderSide(
-                  color: Colors.black87
-              )
-          ),
-          border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(100),
-              borderSide: BorderSide(
-                  color: Colors.black87
-              )
-          ),
-        )
 
-    );
-  }
 }
 
