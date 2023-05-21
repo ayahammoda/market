@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../Widget/textfiled.dart';
+import '../Widget/textfield2.dart';
 class CategoryCH extends StatefulWidget {
   static String id = 'CategoryCH';
 
@@ -23,14 +23,16 @@ class _CategoryCHState extends State<CategoryCH> {
             child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  AppTextFiled(
-                    onClick: (value) {
-                      _items = value;
-                    },
-                    hint: " add the categories ",
-                    icon: Icons.list
-                    ,
-                  )
+                  myTextField(
+
+                  onclick:(value){
+
+                    _items=value;
+                  },
+                  hintText:"enter the category name ",
+                  labelText: 'category name',
+                ),
+
                 ],
             ),
         ),
