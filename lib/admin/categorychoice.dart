@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:market1/color.dart';
 import '../Widget/textfield2.dart';
 class CategoryCH extends StatefulWidget {
   static String id = 'CategoryCH';
@@ -17,7 +18,7 @@ class _CategoryCHState extends State<CategoryCH> {
   Widget build(BuildContext context) {
     return  Scaffold(
         appBar: AppBar(backgroundColor: Colors.black38),
-        backgroundColor: Color(0xFFB970CE),
+        backgroundColor: backgroundColor,
         body: Form(
             key: _globalKey,
             child: Column(
