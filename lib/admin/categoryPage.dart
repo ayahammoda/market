@@ -29,7 +29,16 @@ class _CategoryPageState extends State<CategoryPage> {
     double fontSizeSelected = siz.width * .055;
     double fontSizeUnSelected = siz.width * .05;
 
-    return Scaffold();
+    return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.pushNamed(context, CategoryCH.id);
+        },
+        tooltip: 'Increment',
+        backgroundColor: Colors.green,
+        child: const Icon(Icons.add),
+      ));
+
     /*    //TODO here to view category
         body:StreamBuilder<QuerySnapshot>(
         stream:_store.loaCategory() ,
@@ -123,12 +132,6 @@ class _CategoryPageState extends State<CategoryPage> {
         ));
   }*/
 
-    @override
-    void initState() {
-    }
-    void getCate() async {
-      ca = (await _store.loaCategory()) as List<Categories>;
-    }
   }
 }
 Widget textTab({

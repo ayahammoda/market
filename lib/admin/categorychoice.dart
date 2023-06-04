@@ -34,8 +34,8 @@ class _CategoryCHState extends State<CategoryCH> {
                 height: size.height * .35,
               ),
               TextFormField(
-                onTap: () {
-                  (value)=> _nameCate=value;
+                onSaved: (value) {
+                  _nameCate=value!;
                 },
                 decoration: InputDecoration(
                   fillColor: const Color(0xFFC894D3),
