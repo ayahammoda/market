@@ -11,9 +11,9 @@ class AddProduct extends StatefulWidget {
 }
 
 class _AddProductState extends State<AddProduct> {
-  late String _name, _price, _description;
+  String _name='j' , _price='1', _description='ew,kmnbvc';
   List _category = ['l1', 'l2', 'l3'];
-  late String valuechoose;
+   String valuechoose='null';
   final GlobalKey<FormState> _globalKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
@@ -25,61 +25,51 @@ class _AddProductState extends State<AddProduct> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            MyTextField(
-              onclick: (value) {
-                _name = value;
-              },
+            myTextField(
+              onclick: () {(value)=>_name=value;},
               hintText: "product name...",
               labelText: 'product name',
             ),
             SizedBox(height: 10),
-            MyTextField(
-              onclick: (value) {
-                _price = value;
+            myTextField(
+              onclick: () {
+                (value)=> _price = value;
               },
               hintText: "product price...",
               labelText: 'product price',
             ),
             SizedBox(height: 10),
-            MyTextField(
-              onclick: (value) {
-                _price = value;
-              },
-              hintText: "product price...",
-              labelText: 'product price',
-            ),
-            MyTextField(
-              onclick: (value) {
-                _description = value;
-              },
+
+            myTextField(
+              onclick: (){(value) =>
+              _description = value;},
               hintText: "product discription...",
               labelText: 'product discription',
-            ),
+              ),
             SizedBox(height: 10),
-            MyTextField(
-              onclick: (value) {
-                _category = value;
-              },
+            myTextField(
+              onclick: (){(value) =>
+              _category = value;},
               hintText: "product category...",
               labelText: 'product category',
             ),
             SizedBox(height: 10),
-            DropdownButton(
-              hint: Text("choose a category"),
-              dropdownColor: Colors.grey,
-              icon: Icon(Icons.arrow_drop_down),
-              value: valuechoose,
-              onChanged: (newvalue) {
-                setState(() {
-                  valuechoose == newvalue;
-                });
-              },
-              items: _category.map(
-                (newitem) {
-                  return DropdownMenuItem(value: newitem, child: Text(newitem));
-                },
-              ).toList(),
-            ),
+            // DropdownButton(
+            //   hint: Text("choose a category"),
+            //   dropdownColor: Colors.grey,
+            //   icon: Icon(Icons.arrow_drop_down),
+            //   value: valuechoose,
+            //   onChanged: (newvalue) {
+            //     setState(() {
+            //       valuechoose == newvalue;
+            //     });
+            //   },
+            //   items: _category.map(
+            //     (newitem) {
+            //       return DropdownMenuItem(value: newitem, child: Text(newitem));
+            //     },
+            //   ).toList(),
+            // ),
             SizedBox(height: 20),
             ElevatedButton(
               style: ElevatedButton.styleFrom(primary: Colors.black38),
@@ -97,4 +87,30 @@ class _AddProductState extends State<AddProduct> {
       ),
     );
   }
+}
+
+Widget myTextField({
+  required String hintText,
+  required String labelText,
+  required Function onclick,
+}) {
+  return TextFormField(
+    onTap: onclick(),
+    decoration: InputDecoration(
+      fillColor: const Color(0xFFC894D3),
+      filled: true,
+      labelText: labelText,
+      labelStyle: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+      hintText: hintText,
+      enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(100),
+          borderSide: const BorderSide(color: Colors.black87)),
+      focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(100),
+          borderSide: const BorderSide(color: Colors.black87)),
+      border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(100),
+          borderSide: const BorderSide(color: Colors.black87)),
+    ),
+  );
 }

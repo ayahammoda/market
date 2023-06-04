@@ -33,7 +33,7 @@ class MyApp extends StatelessWidget {
           signupscreen.id: (context) => signupscreen(),
           adminHome.id: (context) => const adminHome(),
           AddProduct.id: (context) => const AddProduct(),
-          CategoryPage.id: (context) => const CategoryPage(),
+          CategoryPage.id: (context) =>  CategoryPage(),
           ProductPage.id: (context) => const ProductPage(),
           CategoryCH.id: (context) => const CategoryCH(),
         },

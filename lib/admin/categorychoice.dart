@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:market1/admin/categoryPage.dart';
 import 'package:market1/color.dart';
+import 'package:market1/constant.dart';
+import 'package:market1/models/category.dart';
+import 'package:market1/services/store.dart';
 
 class CategoryCH extends StatefulWidget {
   static String id = 'CategoryCH';
@@ -13,12 +16,12 @@ class CategoryCH extends StatefulWidget {
 
 class _CategoryCHState extends State<CategoryCH> {
   final GlobalKey<FormState> _globalKey = GlobalKey<FormState>();
-
-  late String _items;
+    String _nameCate='';
+    String _items='';
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
-
+    final _store = Store();
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(backgroundColor: Colors.black38),
@@ -31,7 +34,9 @@ class _CategoryCHState extends State<CategoryCH> {
                 height: size.height * .35,
               ),
               TextFormField(
-                onTap: () {},
+                onTap: () {
+                  (value)=> _nameCate=value;
+                },
                 decoration: InputDecoration(
                   fillColor: const Color(0xFFC894D3),
                   filled: true,
@@ -59,6 +64,13 @@ class _CategoryCHState extends State<CategoryCH> {
                   foregroundColor: KText,
                 ),
                 onPressed: () {
+                  if (_globalKey.currentState!.validate()) {
+                    _globalKey.currentState!.save();
+                    _globalKey.currentState!.reset();
+                    _store.addcategory(Categories(cateName:_nameCate
+
+                    ));
+                  }
                   Navigator.pushNamed(context, CategoryPage.id);
                 },
                 child: const Text('ADD'),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:market1/admin/addProduct.dart';
+import 'package:market1/admin/adminhome.dart';
 
 class ProductPage extends StatefulWidget {
   static String id = 'productPage';
@@ -27,7 +28,7 @@ class _ProductPageState extends State<ProductPage> {
         ),
         floatingActionButton: FloatingActionButton(
           onPressed: () {
-            Navigator.pushNamed(context, AddProduct.id);
+            Navigator.pushNamed(context, adminHome.id);
           },
           tooltip: 'Increment',
           backgroundColor: Colors.green,

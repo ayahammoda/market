@@ -10,4 +10,7 @@ class Store {
       kCategoryName: category.cateName,
     });
   }
+  Stream<QuerySnapshot> loaCategory() {
+    return _firestore.collection(kCategoryCollection).snapshots();
+  }
 }
