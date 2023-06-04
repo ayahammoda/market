@@ -1,2 +1,2 @@
 const kCategoryName ='category';
-const kCategoryCollection ='categorycol';
+const kCategoryCollection ='categoryCollection';
