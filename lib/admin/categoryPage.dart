@@ -3,6 +3,7 @@ import 'package:market1/admin/categorychoice.dart';
 import 'package:market1/color.dart';
 
 class CategoryPage extends StatefulWidget {
+  static String id = 'categoryPage';
   const CategoryPage({Key? key}) : super(key: key);
 
   @override
@@ -14,52 +15,10 @@ class _CategoryPageState extends State<CategoryPage> {
   @override
   Widget build(BuildContext context) {
     var siz = MediaQuery.of(context).size;
-    double fontSizeSelected = siz.width * .029;
-    double fontSizeUnSelected = siz.width * .028;
+    double fontSizeSelected = siz.width * .055;
+    double fontSizeUnSelected = siz.width * .05;
 
     return Scaffold(
-        appBar: AppBar(
-          backgroundColor: backgroundColor,
-          elevation: 0,
-          bottom: TabBar(
-            indicatorColor: KText,
-            onTap: (value) {
-              setState(() {
-                _tabBarIndex = value;
-              });
-            },
-            tabs: [
-              textTab(
-                text: "category",
-                tabBarIndex: _tabBarIndex,
-                index: 0,
-                fontSizeSelected: fontSizeSelected,
-                fontSizeUnSelected: fontSizeUnSelected,
-              ),
-              textTab(
-                text: "Product",
-                tabBarIndex: _tabBarIndex,
-                index: 1,
-                fontSizeSelected: fontSizeSelected,
-                fontSizeUnSelected: fontSizeUnSelected,
-              ),
-              textTab(
-                text: "category",
-                tabBarIndex: _tabBarIndex,
-                index: 2,
-                fontSizeSelected: fontSizeSelected,
-                fontSizeUnSelected: fontSizeUnSelected,
-              ),
-              textTab(
-                text: "Product",
-                tabBarIndex: _tabBarIndex,
-                index: 3,
-                fontSizeSelected: fontSizeSelected,
-                fontSizeUnSelected: fontSizeUnSelected,
-              ),
-            ],
-          ),
-        ),
         //TODO here to view category
         body: const Column(
           mainAxisAlignment: MainAxisAlignment.center,

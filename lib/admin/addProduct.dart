@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../Widget/textfield2.dart';
+import '../Widget/myTextField.dart';
 
 class AddProduct extends StatefulWidget {
   static String id = 'AddProduct03';
@@ -25,7 +25,7 @@ class _AddProductState extends State<AddProduct> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            myTextField(
+            MyTextField(
               onclick: (value) {
                 _name = value;
               },
@@ -33,7 +33,7 @@ class _AddProductState extends State<AddProduct> {
               labelText: 'product name',
             ),
             SizedBox(height: 10),
-            myTextField(
+            MyTextField(
               onclick: (value) {
                 _price = value;
               },
@@ -41,14 +41,14 @@ class _AddProductState extends State<AddProduct> {
               labelText: 'product price',
             ),
             SizedBox(height: 10),
-            myTextField(
+            MyTextField(
               onclick: (value) {
                 _price = value;
               },
               hintText: "product price...",
               labelText: 'product price',
             ),
-            myTextField(
+            MyTextField(
               onclick: (value) {
                 _description = value;
               },
@@ -56,7 +56,7 @@ class _AddProductState extends State<AddProduct> {
               labelText: 'product discription',
             ),
             SizedBox(height: 10),
-            myTextField(
+            MyTextField(
               onclick: (value) {
                 _category = value;
               },
