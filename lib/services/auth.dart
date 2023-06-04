@@ -1,16 +1,31 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 
 class Auth {
   final  _auth = FirebaseAuth.instance ;
-
-  Future signup(String _email, String _password) async  //ToDo مشان ياخد الwait
-  {try{
+ final nameController=TextEditingController();
+   final passwordController=TextEditingController();
+  final emailController=TextEditingController();
+  Future signup(String email, String password, String name ) async  //ToDo مشان ياخد الwait
+  {
     //TODO حطيت await لانو الارجاع رح يكون null لانو التعليمة رح تاخد وقت لبين ما تخلص فبقلو يستنى لتخلص مشان ما يكون الارجاع null
-    final  authResult = await _auth.createUserWithEmailAndPassword
-      (email: _email, password: _password);
-    return authResult;}catch(er){print("this is the error from signup function:$er");};
-  }
+      await _auth.createUserWithEmailAndPassword
+        (
+          email: email.trim(),
+          password: password.trim(),
 
+
+      );
+
+        await FirebaseFirestore.instance.collection('users').add(
+           {
+              'name': name,
+              'email':email,
+
+            });
+
+  }
   Future<UserCredential> signin(String _email, String _password) async {
     final authResult = await _auth.signInWithEmailAndPassword
       (email: _email, password: _password);

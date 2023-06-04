@@ -14,3 +14,11 @@ class Store {
     return _firestore.collection(kCategoryCollection).snapshots();
   }
 }
+
+
+
+
+
+
+
+
