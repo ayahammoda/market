@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../Widget/textfield2.dart';
+import '../Widget/textfiled.dart';
 class CategoryCH extends StatefulWidget {
   static String id = 'CategoryCH';
 
@@ -13,6 +14,7 @@ class _CategoryCHState extends State<CategoryCH> {
 
   final GlobalKey<FormState> _globalKey = GlobalKey<FormState>();
   late String _items ;
+  TextEditingController categoryController=TextEditingController();
   @override
   Widget build(BuildContext context) {
     return  Scaffold(
@@ -23,16 +25,12 @@ class _CategoryCHState extends State<CategoryCH> {
             child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  myTextField(
-
-                  onclick:(value){
-
-                    _items=value;
-                  },
-                  hintText:"enter the category name ",
-                  labelText: 'category name',
-                ),
-
+                  AppTextFiled(
+                    controller: categoryController,
+                    hint: " add the categories ",
+                    icon: Icons.list
+                    ,
+                  )
                 ],
             ),
         ),

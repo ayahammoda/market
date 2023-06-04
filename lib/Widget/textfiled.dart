@@ -3,21 +3,22 @@ import 'package:flutter/material.dart';
 import '../color.dart';
 
 class AppTextFiled extends StatelessWidget {
+  final TextEditingController controller;
   final String hint;
   final IconData icon;
  final String? Function(String?)? validator;
   final  TextInputType? keyboardType;
-  final Function onClick;
+  final Function? onClick;
   bool obs =false;
 
 
-  AppTextFiled( { this.obs=false, required this.hint,required this.icon, this.validator, this.keyboardType,required this.onClick});
+  AppTextFiled( { required this.controller,this.obs=false, required this.hint,required this.icon, this.validator, this.keyboardType, this.onClick, });
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 25,vertical:6),
       child:  TextFormField(
-        onSaved: onClick(),
+        controller: controller,
         validator: validator,
         obscureText:obs ,
         keyboardType: keyboardType,

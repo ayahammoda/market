@@ -1,5 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:market1/admin/adminhome.dart';
 import 'package:market1/provider/modelHud.dart';
 import 'package:market1/screens/login_screen.dart';
 import 'package:market1/screens/login_valid.dart';
@@ -8,6 +10,7 @@ import '../Widget/textfiled.dart';
 import '../color.dart';
 import 'package:market1/services/auth.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';
 
 
@@ -15,7 +18,10 @@ class signupscreen extends StatelessWidget {
   final GlobalKey<FormState> _globalKey=GlobalKey<FormState>();
   final _auth=Auth();
   static String id='signupscreen';
-   late String _email, _password, name;
+ // String email, password, name;
+ TextEditingController nameController=TextEditingController();
+  TextEditingController passwordController=TextEditingController();
+   TextEditingController emailController=TextEditingController();
   @override
   Widget build(BuildContext context) {
     double height= MediaQuery.of(context).size.height;
@@ -60,7 +66,7 @@ class signupscreen extends StatelessWidget {
                   height: height*0.07,
                 ),
                 AppTextFiled(hint: 'enter your name ', icon: Icons.perm_identity,
-                  onClick: (value){ name=value; },
+                 controller: nameController,
                   keyboardType: TextInputType.name,
                   validator: (value) =>LoginValidator.validatename(value),
                 ),
@@ -68,9 +74,7 @@ class signupscreen extends StatelessWidget {
                   height: height*0.001,
                 ),
                 AppTextFiled( icon: Icons.email, hint: 'enter your email',
-                  onClick:(value){
-                  _email=value;
-                  },
+                  controller: emailController,
                   keyboardType: TextInputType.emailAddress,
                   validator: (value) => LoginValidator.validateEmail(value),
                   ),
@@ -78,8 +82,7 @@ class signupscreen extends StatelessWidget {
                   height: height*0.001,
                 ),
                 AppTextFiled(hint: 'enter your password ', icon: Icons.lock,
-                  onClick: (value)
-                   { _password= value;},
+                 controller: passwordController,
                   obs: true,
                   keyboardType: TextInputType.visiblePassword,
                   validator: (value) =>LoginValidator.validatePassword(value),),
@@ -93,31 +96,39 @@ class signupscreen extends StatelessWidget {
                       return ElevatedButton(
                           onPressed: () async
                           {
-                            final modehud =  Provider.of<ModelHude>(context,listen: false);
-                            modehud.changeisloadiing(true);
+                         //   final modehud =  Provider.of<ModelHude>(context,listen: false);
+                          //  modehud.changeisloadiing(true);
                             if (_globalKey.currentState!.validate()) {
-                              try {
-                                _globalKey.currentState!.save();
-                                print(_email);
-                                print(_password);
-                                final authResult = await _auth.signup(
-                                    _email, _password);
-                                modehud.changeisloadiing(false);
-                                //todo عند لين وبتول
-                                //Navigator.pushNamed(context, HomePage.id);
-                             //  print(authResult.user?.uid);
-                              }  on PlatformException catch (e) {
-                                modehud.changeisloadiing(false);
-                              //  print(e.toString());
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                        content: Text(
-                                          e.message.toString() )
-                                    ));
-                               }
+                          try {
+                          final authResult= await _auth.signup(emailController.text, passwordController.text,nameController.text);
+                          _globalKey.currentState!.save();
+                       //   print(email);
+                      //    print(password);
+                          //  modehud.changeisloadiing(false);
+                          // final authResult = await _auth.signup(
+                          //   _email, _password);
+
+                          //todo عند لين وبتول
+                          Navigator.pushNamed(context,adminHome.id);
+
+                          print(authResult);
+
+                          //  print(authResult.user?.uid);
+                          }   catch (e) {
+                         // modehud.changeisloadiing(false);
+                          print(e.toString());
+                          ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                          content: Text(
+                          e.toString() )
+
+                          )
+                          );//
+                          }
+                        //
                               };
                             //todo بدي ياها تختفي لانو اذا طلع ايرور رح تضل موجودة
-                            modehud.changeisloadiing(false);
+                          //  modehud.changeisloadiing(false);
                             },
                             style:
                             ElevatedButton.styleFrom(
