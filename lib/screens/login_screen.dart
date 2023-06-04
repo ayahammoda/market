@@ -8,7 +8,7 @@ import 'package:provider/provider.dart';
 import '../Widget/textfiled.dart';
 import 'package:market1/services/auth.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
-import 'package:market1/admin/movePages.dart';
+//import 'package:market1/admin/movePages.dart';
 
 import '../provider/modelHud.dart';
 
