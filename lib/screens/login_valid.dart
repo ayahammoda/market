@@ -1,17 +1,14 @@
 class LoginValidator{
-static String? validateEmail(String? value)
-  {
+static String? validateEmail(String? value) {
   if (value == null || value.isEmpty) {
     return ' email is empty ! ';
   }
 
-  if (!value.contains('@'))
-  {
-      return 'pleas inter a value email address';
+  if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value)) {
+    return 'pleas inter a value email address';
   }
-  return null ;
-   }
-
+  return null;
+}
 
   static String? validatePassword(String? value)
   {

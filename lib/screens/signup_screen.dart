@@ -96,26 +96,17 @@ class signupscreen extends StatelessWidget {
                       return ElevatedButton(
                           onPressed: () async
                           {
-                         //   final modehud =  Provider.of<ModelHude>(context,listen: false);
-                          //  modehud.changeisloadiing(true);
                             if (_globalKey.currentState!.validate()) {
+                              final authResult= await _auth.signup(emailController.text,
+                                  passwordController.text,nameController.text);
+                              _globalKey.currentState!.save();
                           try {
-                          final authResult= await _auth.signup(emailController.text, passwordController.text,nameController.text);
-                          _globalKey.currentState!.save();
-                       //   print(email);
-                      //    print(password);
-                          //  modehud.changeisloadiing(false);
-                          // final authResult = await _auth.signup(
-                          //   _email, _password);
 
-                          //todo عند لين وبتول
-                          Navigator.pushNamed(context,adminHome.id);
-
+                          Navigator.pushNamed(context,loginscreen.id);
                           print(authResult);
 
                           //  print(authResult.user?.uid);
                           }   catch (e) {
-                         // modehud.changeisloadiing(false);
                           print(e.toString());
                           ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
@@ -125,10 +116,8 @@ class signupscreen extends StatelessWidget {
                           )
                           );//
                           }
-                        //
                               };
                             //todo بدي ياها تختفي لانو اذا طلع ايرور رح تضل موجودة
-                          //  modehud.changeisloadiing(false);
                             },
                             style:
                             ElevatedButton.styleFrom(

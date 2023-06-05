@@ -10,13 +10,13 @@ import 'package:market1/services/auth.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 //import 'package:market1/admin/movePages.dart';
 
+import '../profilePage.dart';
 import '../provider/modelHud.dart';
 
 class loginscreen extends StatelessWidget {
   final GlobalKey <FormState> _globalKey=GlobalKey<FormState>();
   final _auth=Auth();
   static String id = 'loginscreen';
-  bool admain=false;
    late String _email, _password;
    TextEditingController emailController=TextEditingController();
    TextEditingController passwordController=TextEditingController();
@@ -66,7 +66,6 @@ class loginscreen extends StatelessWidget {
               AppTextFiled( icon: Icons.email, hint: 'enter your email',
                 controller: emailController,
                  onClick:(value){
-                // print("aya dobeh $value");
                   _email=value;
                  },
                 keyboardType: TextInputType.emailAddress,
@@ -92,33 +91,25 @@ class loginscreen extends StatelessWidget {
                    builder: (context) {
                      return ElevatedButton(
                         onPressed: () async
-                           {
-                             final modehud =  Provider.of<ModelHude>(context,listen: false);
-                             modehud.changeisloadiing(true);
-                        if( _globalKey.currentState!.validate())
                         {
-                          _globalKey.currentState!.save();
-                          try{
-                       // print(emailController.text);
-                       // print(passwordController.text);
-                        final result=await  _auth.signin(emailController.text.trim(), passwordController.text.trim());
-                       // final result= await _auth.signin("aya1234@gmail.com", "1234567");
-                      //  print("result====> $result");
-                        //modehud.changeisloadiing(false);
-                        //todo عند لين وبتول
-                        Navigator.pushNamed(context,adminHome.id);
-                        //  print(result.user?.uid);
-                        } on PlatformException catch (e) {
-                          modehud.changeisloadiing(false);
-                          //print(e.toString());
-                        ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                        content: Text(
-                        e.message.toString() )
-                        ));
-                        }
-                        };
-                          modehud.changeisloadiing(false);
+                          if (_globalKey.currentState!.validate()) {
+                          final result = await _auth.signin(emailController.text, passwordController.text);
+                            _globalKey.currentState!.save();
+                            try {
+                                  if( emailController.text == 'aya200@gmail.com'){
+                                  Navigator.pushNamed(context, ProfilePage.id);
+                                }
+                                  else print('page client');
+                              print(result);
+                             // Navigator.pushNamed(context, adminHome.id);
+                            } catch (e) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                      content: Text(
+                                          e.toString())
+                                  ));
+                            }
+                          };
                         },
                          style: ElevatedButton.styleFrom(
                            shape: RoundedRectangleBorder(
