@@ -5,6 +5,7 @@ import 'package:market1/admin/adminhome.dart';
 import 'package:market1/admin/categoryPage.dart';
 import 'package:market1/admin/categorychoice.dart';
 import 'package:market1/admin/productPage.dart';
+import 'package:market1/profilePage.dart';
 import 'package:market1/provider/modelHud.dart';
 import 'package:market1/screens/login_screen.dart';
 import 'package:market1/screens/signup_screen.dart';
@@ -31,6 +32,7 @@ class MyApp extends StatelessWidget {
         routes: {
           loginscreen.id: (context) => loginscreen(),
           signupscreen.id: (context) => signupscreen(),
+          ProfilePage.id:  (context) => ProfilePage(),
           adminHome.id: (context) => const adminHome(),
           AddProduct.id: (context) => const AddProduct(),
           CategoryPage.id: (context) =>  CategoryPage(),
