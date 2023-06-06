@@ -8,7 +8,7 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   TextEditingController _nameController = TextEditingController();
-  TextEditingController _passwordController = TextEditingController();
+  TextEditingController _emailController = TextEditingController();
   TextEditingController _phoneController = TextEditingController();
   TextEditingController _addressController = TextEditingController();
 
@@ -62,7 +62,7 @@ class _ProfilePageState extends State<ProfilePage> {
             ),
             SizedBox(height: 16.0),
             TextField(
-              controller: _passwordController,
+              controller: _emailController,
               obscureText: true,
               decoration: InputDecoration(
                 labelText: 'Password',
