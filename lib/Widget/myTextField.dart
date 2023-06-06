@@ -4,16 +4,20 @@ class MyTextField extends StatelessWidget {
   final String hintText;
   final Function onclick;
   final String labelText;
-
+  final TextEditingController controller;
   const MyTextField(
-      {required this.hintText, required this.onclick, required this.labelText});
+      {required this.hintText,
+      required this.onclick,
+      required this.labelText,
+      required this.controller});
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 6),
       child: TextFormField(
-        onTap: onclick(),
+        controller: controller,
+        onSaved: onclick(),
         decoration: InputDecoration(
           fillColor: const Color(0xFFC894D3),
           filled: true,
