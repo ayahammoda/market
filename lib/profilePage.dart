@@ -103,13 +103,13 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 }*/
 import 'dart:io';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:market1/admin/adminhome.dart';
 
 
 class StoreProfilePage extends StatefulWidget {
@@ -128,7 +128,7 @@ class _StoreProfilePageState extends State<StoreProfilePage> {
   final FirebaseStorage _storage =
   FirebaseStorage.instanceFor(bucket: 'gs://firebase_project_id.appspot.com');
   User? _user;
-  DocumentSnapshot? _storeData;
+  Map<String, dynamic>? _storeData;
   bool _isLoading = true;
 
   @override
@@ -154,7 +154,13 @@ class _StoreProfilePageState extends State<StoreProfilePage> {
         .get();
     if (snapshot.exists) {
       setState(() {
-        _storeData = snapshot;
+        Map<String, dynamic>? data = snapshot.data();
+        print('this is snapshot$data');
+        print(data?['store_name']);
+        nameMController.text=data?['store_name'];
+        descriptionController.text=data?['store_description'];
+        addressController.text=data?['store_address'];
+        _storeData =data;
         _isLoading = false;
       });
     } else {
@@ -169,15 +175,22 @@ class _StoreProfilePageState extends State<StoreProfilePage> {
       setState(() {
         _isLoading = true;
       });
-      final data = _formKey.currentState!.value;
+      Map<String, dynamic> datastore={
+      'store_name': nameMController.text,
+      'store_description': descriptionController.text,
+      'store_address':addressController.text,
+      };
+     // final data = _formKey.currentState!.value;
       try {
         if (_storeData == null) {
           await _firestore
-              .collection('collection_name')
+              .collection('detils')
               .doc(_user!.uid)
-              .set(data);
+              .set(datastore);
         } else {
-          await _storeData!.reference.update(data);
+            await _firestore
+              .collection('collection_name')
+              .doc(_user!.uid).update(datastore);
         }
         if (_imageFile != null) {
           final ref =
@@ -198,6 +211,11 @@ class _StoreProfilePageState extends State<StoreProfilePage> {
       } catch (e) {
         setState(() {
           _isLoading = false;
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('حدث خطأ أثناء حفظ البيانات'),
+            ),
+          );
         });
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -222,7 +240,8 @@ class _StoreProfilePageState extends State<StoreProfilePage> {
   void _logout() async {
     try {
       await _auth.signOut();
-      Navigator.of(context).pop();
+      Navigator.pushNamed(context, adminHome.id);
+    //  Navigator.of(context).pop();
     } catch (e) {
       print(e);
     }
@@ -245,24 +264,13 @@ class _StoreProfilePageState extends State<StoreProfilePage> {
       body: _isLoading
           ? Center(child: CircularProgressIndicator())
           : SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              FormBuilder(
+            child: Padding(
+               padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                FormBuilder(
                 key: _formKey,
-                initialValue:{
-                  'store_name': _storeData != null
-                      ? _storeData!['store_name']
-                      : null,
-                  'store_description': _storeData != null
-                      ? _storeData!['store_description']
-                      : null,
-                  'store_address': _storeData != null
-                      ? _storeData!['store_address']
-                      : null,
-                },
                 child: Column(
                   children: [
                     if (_storeData != null && _storeData!['profile_image'] != null)
@@ -282,6 +290,7 @@ class _StoreProfilePageState extends State<StoreProfilePage> {
                       TextFormField(
                         controller: nameMController,
                         decoration: InputDecoration(
+                          hintText: _storeData?['store_name'],
                           labelText: 'اسم المتجر',
                         ),
                         validator: (value) {
@@ -295,37 +304,39 @@ class _StoreProfilePageState extends State<StoreProfilePage> {
                         },
                       ),
 
-        TextFormField(
-          controller: descriptionController,
-          decoration: InputDecoration(
-            labelText: 'وصف المتجر',
-          ),
-          validator: (value) {
-            if (value!.isEmpty) {
-              return 'هذا الحقل مطلوب';
-            }
-            if (value!.length > 250) {
-              return 'يجب أن يكون الحد الأقصى لطول النص 250 حرفاً';
-            }
-            return null;
-          },
-        ),
+                  TextFormField(
+                    controller: descriptionController,
+                   decoration: InputDecoration(
+                    hintText: _storeData?['store_description'],
+                         labelText: 'وصف المتجر',
+                     ),
+                        validator: (value) {
+                   if (value!.isEmpty) {
+                     return 'هذا الحقل مطلوب';
+                 }
+                  if (value!.length > 250) {
+                      return 'يجب أن يكون الحد الأقصى لطول النص 250 حرفاً';
+                    }
+                     return null;
+                 },
+                 ),
 
-        TextFormField(
-          controller: addressController,
-          decoration: InputDecoration(
-            labelText: 'عنوان المتجر',
-          ),
-          validator: (value) {
-            if (value!.isEmpty) {
-              return 'هذا الحقل مطلوب';
-            }
-            if (value.length > 100) {
-              return 'يجب أن يكون الحد الأقصى لطول النص 100 حرفاً';
-            }
-            return null;
-          },
-        ),
+                  TextFormField(
+                  controller: addressController,
+                     decoration: InputDecoration(
+                     hintText: _storeData?['store_address'],
+                      labelText: 'عنوان المتجر',
+                   ),
+                     validator: (value) {
+                     if (value!.isEmpty) {
+                    return 'هذا الحقل مطلوب';
+                 }
+                    if (value.length > 100) {
+                     return 'يجب أن يكون الحد الأقصى لطول النص 100 حرفاً';
+                  }
+                  return null;
+                 },
+                  ),
 
                     if (_imageFile != null)
                       Padding(
@@ -349,9 +360,11 @@ class _StoreProfilePageState extends State<StoreProfilePage> {
                           label: Text('تحديد صورة المتجر'),
                         ),
                         ElevatedButton.icon(
-                          onPressed: () => _saveData(),
+
+                         onPressed: () => _saveData(),
                           icon: Icon(Icons.save),
                           label: Text('حفظ البيانات'),
+
                         ),
                       ],
                     ),
