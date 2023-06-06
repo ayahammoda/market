@@ -12,6 +12,7 @@ import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 
 import '../profilePage.dart';
 import '../provider/modelHud.dart';
+import '../user/pageHomeUser.dart';
 
 class loginscreen extends StatelessWidget {
   final GlobalKey <FormState> _globalKey=GlobalKey<FormState>();
@@ -99,7 +100,8 @@ class loginscreen extends StatelessWidget {
                                   if( emailController.text == 'aya200@gmail.com'){
                                   Navigator.pushNamed(context, StoreProfilePage.id);
                                 }
-                                  else print('page client');
+                                  else Navigator.pushNamed(context, PageHomeUser .id);
+                        ;
                               print(result);
                              // Navigator.pushNamed(context, adminHome.id);
                             } catch (e) {

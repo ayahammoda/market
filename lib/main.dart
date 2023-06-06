@@ -9,6 +9,7 @@ import 'package:market1/profilePage.dart';
 import 'package:market1/provider/modelHud.dart';
 import 'package:market1/screens/login_screen.dart';
 import 'package:market1/screens/signup_screen.dart';
+import 'package:market1/user/pageHomeUser.dart';
 import 'package:provider/provider.dart';
 
 import 'firebase_options.dart';
@@ -38,6 +39,8 @@ class MyApp extends StatelessWidget {
           CategoryPage.id: (context) => CategoryPage(),
           ProductPage.id: (context) => const ProductPage(),
           CategoryCH.id: (context) => const CategoryCH(),
+          PageHomeUser.id: (context) => const PageHomeUser(),
+
         },
       ),
     );
