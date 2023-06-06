@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+/*import 'package:flutter/material.dart';
 
 class ProfilePage extends StatefulWidget {
   static String id='profilepage';
@@ -97,6 +97,269 @@ class _ProfilePageState extends State<ProfilePage> {
               child: Text('Save'),
             ),
           ],
+        ),
+      ),
+    );
+  }
+}*/
+import 'dart:io';
+
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
+
+class StoreProfilePage extends StatefulWidget {
+  static String id = 'Storeprofilepage';
+  @override
+  _StoreProfilePageState createState() => _StoreProfilePageState();
+}
+
+class _StoreProfilePageState extends State<StoreProfilePage> {
+  final GlobalKey<FormBuilderState> _formKey = GlobalKey<FormBuilderState>();
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  TextEditingController nameMController=TextEditingController();
+  TextEditingController descriptionController=TextEditingController();
+  TextEditingController addressController=TextEditingController();
+  final FirebaseStorage _storage =
+  FirebaseStorage.instanceFor(bucket: 'gs://firebase_project_id.appspot.com');
+  User? _user;
+  DocumentSnapshot? _storeData;
+  bool _isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _getCurrentUser();
+  }
+
+  Future<void> _getCurrentUser() async {
+    final user = _auth.currentUser;
+    if (user != null) {
+      setState(() {
+        _user = user;
+      });
+      await _fetchStoreData();
+    }
+  }
+
+  Future<void> _fetchStoreData() async {
+    final snapshot = await _firestore
+        .collection('collection_name')
+        .doc(_user!.uid)
+        .get();
+    if (snapshot.exists) {
+      setState(() {
+        _storeData = snapshot;
+        _isLoading = false;
+      });
+    } else {
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
+
+  Future<void> _saveData() async {
+    if (_formKey.currentState!.saveAndValidate()) {
+      setState(() {
+        _isLoading = true;
+      });
+      final data = _formKey.currentState!.value;
+      try {
+        if (_storeData == null) {
+          await _firestore
+              .collection('collection_name')
+              .doc(_user!.uid)
+              .set(data);
+        } else {
+          await _storeData!.reference.update(data);
+        }
+        if (_imageFile != null) {
+          final ref =
+          _storage.ref('stores/${_user!.uid}/profile.jpg');
+          await ref.putFile(_imageFile!);
+        }
+        setState(() {
+          _isLoading = false;
+          _storeData = null;
+          _formKey.currentState!.reset();
+        });
+        await _fetchStoreData();
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('تم حفظ البيانات بنجاح'),
+          ),
+        );
+      } catch (e) {
+        setState(() {
+          _isLoading = false;
+        });
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('حدث خطأ أثناء حفظ البيانات'),
+          ),
+        );
+        print(e);
+      }
+    }
+  }
+
+  Future<void> _pickImage() async {
+    final picker = ImagePicker();
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+    if (pickedFile != null) {
+      setState(() {
+        _imageFile = File(pickedFile.path);
+      });
+    }
+  }
+
+  void _logout() async {
+    try {
+      await _auth.signOut();
+      Navigator.of(context).pop();
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  File? _imageFile;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('الملف الشخصي'),
+        actions: [
+          IconButton(
+            onPressed: () => _logout(),
+            icon: Icon(Icons.logout),
+          ),
+        ],
+      ),
+      body: _isLoading
+          ? Center(child: CircularProgressIndicator())
+          : SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              FormBuilder(
+                key: _formKey,
+                initialValue:{
+                  'store_name': _storeData != null
+                      ? _storeData!['store_name']
+                      : null,
+                  'store_description': _storeData != null
+                      ? _storeData!['store_description']
+                      : null,
+                  'store_address': _storeData != null
+                      ? _storeData!['store_address']
+                      : null,
+                },
+                child: Column(
+                  children: [
+                    if (_storeData != null && _storeData!['profile_image'] != null)
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 16.0),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(8.0),
+                          child: Image.network(
+                            _storeData!['profile_image'],
+                            width: double.infinity,
+                            height: 200,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      ),
+
+                      TextFormField(
+                        controller: nameMController,
+                        decoration: InputDecoration(
+                          labelText: 'اسم المتجر',
+                        ),
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return 'هذا الحقل مطلوب';
+                          }
+                          if (value!.length > 50) {
+                            return 'يجب أن يكون الحد الأقصى لطول النص 50 حرفًا';
+                          }
+                          return null;
+                        },
+                      ),
+
+        TextFormField(
+          controller: descriptionController,
+          decoration: InputDecoration(
+            labelText: 'وصف المتجر',
+          ),
+          validator: (value) {
+            if (value!.isEmpty) {
+              return 'هذا الحقل مطلوب';
+            }
+            if (value!.length > 250) {
+              return 'يجب أن يكون الحد الأقصى لطول النص 250 حرفاً';
+            }
+            return null;
+          },
+        ),
+
+        TextFormField(
+          controller: addressController,
+          decoration: InputDecoration(
+            labelText: 'عنوان المتجر',
+          ),
+          validator: (value) {
+            if (value!.isEmpty) {
+              return 'هذا الحقل مطلوب';
+            }
+            if (value.length > 100) {
+              return 'يجب أن يكون الحد الأقصى لطول النص 100 حرفاً';
+            }
+            return null;
+          },
+        ),
+
+                    if (_imageFile != null)
+                      Padding(
+                        padding: const EdgeInsets.only(top: 16.0),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(8.0),
+                          child: Image.file(
+                            _imageFile!,
+                            width: double.infinity,
+                            height: 200,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        TextButton.icon(
+                          onPressed: () => _pickImage(),
+                          icon: Icon(Icons.photo),
+                          label: Text('تحديد صورة المتجر'),
+                        ),
+                        ElevatedButton.icon(
+                          onPressed: () => _saveData(),
+                          icon: Icon(Icons.save),
+                          label: Text('حفظ البيانات'),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
