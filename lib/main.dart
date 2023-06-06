@@ -32,10 +32,10 @@ class MyApp extends StatelessWidget {
         routes: {
           loginscreen.id: (context) => loginscreen(),
           signupscreen.id: (context) => signupscreen(),
-          ProfilePage.id:  (context) => ProfilePage(),
+          ProfilePage.id: (context) => ProfilePage(),
           adminHome.id: (context) => const adminHome(),
           AddProduct.id: (context) => const AddProduct(),
-          CategoryPage.id: (context) =>  CategoryPage(),
+          CategoryPage.id: (context) => CategoryPage(),
           ProductPage.id: (context) => const ProductPage(),
           CategoryCH.id: (context) => const CategoryCH(),
         },
