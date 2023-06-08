@@ -1,5 +1,8 @@
+const kcategoryId='id';
 const kCategoryName = 'category';
 const kCategoryCollection = 'categoryCollection';
+
+
 const kProductCollection = 'productCollection';
 const kProductName = 'productName';
 const kProductPrice = 'productPrice';
