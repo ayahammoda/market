@@ -24,8 +24,8 @@ class _CategoryCHState extends State<CategoryCH> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(backgroundColor: Colors.black38),
-      backgroundColor: Color(0xFFB970CE),
+      appBar: AppBar(backgroundColor: endc),
+      backgroundColor: backgroundColor,
       body: Form(
         key: _globalKey,
         child: Column(
@@ -36,7 +36,7 @@ class _CategoryCHState extends State<CategoryCH> {
                 _nameCate = value!;
               },
               decoration: InputDecoration(
-                fillColor: const Color(0xFFC894D3),
+                fillColor: startc,
                 filled: true,
                 labelText: 'Category Name',
                 labelStyle:
@@ -53,25 +53,9 @@ class _CategoryCHState extends State<CategoryCH> {
                     borderSide: const BorderSide(color: Colors.black87)),
               ),
             ),
-            // AppTextFiled(
-            //   onClick: (value) {
-            //     _nameCate = value;
-            //   },
-            //   controller: categoryController,
-            //   hint: " add the categories ",
-            //   icon: Icons.list,
-            // ),
-            // MyTextField(
-            //   controller: categoryController,
-            //   onclick: (value) {
-            //     _nameCate = value;
-            //   },
-            //   labelText: 'CAtEGORY NAME',
-            //   hintText: 'enter the categoryName....',
-            // ),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
-                backgroundColor: kMaincolor,
+                backgroundColor: endc,
                 foregroundColor: KText,
               ),
               onPressed: () {
@@ -84,7 +68,46 @@ class _CategoryCHState extends State<CategoryCH> {
                 }
                 Navigator.pushNamed(context, adminHome.id);
               },
-              child: const Text('ADD'),
+              child: Text('ADD'),
+            ),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: endc,
+                foregroundColor: KText,
+              ),
+              onPressed: () async {
+                if (_globalKey.currentState!.validate()) {
+                  _globalKey.currentState!.save();
+                  _globalKey.currentState!.reset();
+                  QuerySnapshot snapshot = await FirebaseFirestore.instance
+                      .collection(kCategoryCollection).get();
+                      // .where(kCategoryName, isEqualTo: _nameCate)
+                      // .get();
+                  if (snapshot.docs.isEmpty) {
+                    var cat= await _firestore.collection(kCategoryCollection).where(kCategoryName, isEqualTo: snapshot).get();
+                    if(cat.docs.isNotEmpty){
+                      var categoryId = cat.docs.first.id;
+                    }
+                    print('No matching documents found');
+                  } else {
+
+                    String categoryId = snapshot.docs.first.id;
+                    try {
+
+                      await _firestore
+                          .collection(kCategoryCollection)
+                          .doc(categoryId)
+                          .update({kCategoryName: _nameCate});
+                      print('Category updated successfully!');
+                    } catch (e) {
+                      print('Error updating category: $e');
+                    }
+                  }
+
+                }
+                Navigator.pushNamed(context, adminHome.id);
+              },
+              child: const Text('EDIT'),
             ),
           ],
         ),

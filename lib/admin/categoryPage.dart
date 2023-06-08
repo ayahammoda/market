@@ -13,6 +13,8 @@ class CategoryPage extends StatefulWidget {
   State<CategoryPage> createState() => _CategoryPageState();
 }
 
+
+
 class _CategoryPageState extends State<CategoryPage> {
   CollectionReference usersRef =
       FirebaseFirestore.instance.collection(kCategoryCollection);
@@ -71,16 +73,26 @@ class _CategoryPageState extends State<CategoryPage> {
                       ),
                       Row(
                         children: [
+                          SizedBox(width: 60),
                           GestureDetector(
-                            onTap: () {},
+                            onTap: () {
+                              document.reference.delete();
+                            },
                             child: SizedBox(
                               width: siz.width * .02,
                               height: siz.height * .03,
                               child: const Icon(Icons.delete),
                             ),
                           ),
+                          SizedBox(width: 20),
                           GestureDetector(
-                            onTap: () {},
+                            onTap: () {
+                              Navigator.pushNamed(context, CategoryCH.id,
+                                  arguments: {
+                                    kCategoryName: data[kCategoryName],
+                                    kcategoryId: data[document.id]
+                                  });
+                            },
                             child: SizedBox(
                               width: siz.width * .02,
                               height: siz.height * .03,
