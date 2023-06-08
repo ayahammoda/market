@@ -31,7 +31,7 @@ class MyApp extends StatelessWidget {
       create: (context) => ModelHude(),
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        initialRoute: adminHome.id,
+        initialRoute: StoreProfilePage.id,
         routes: {
           loginscreen.id: (context) => loginscreen(),
           signupscreen.id: (context) => signupscreen(),

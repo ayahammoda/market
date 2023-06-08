@@ -111,6 +111,8 @@ import 'package:image_picker/image_picker.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:market1/admin/adminhome.dart';
 
+import 'color.dart';
+
 
 class StoreProfilePage extends StatefulWidget {
   static String id = 'Storeprofilepage';
@@ -184,7 +186,7 @@ class _StoreProfilePageState extends State<StoreProfilePage> {
       try {
         if (_storeData == null) {
           await _firestore
-              .collection('detils')
+              .collection('collection_name')
               .doc(_user!.uid)
               .set(datastore);
         } else {
@@ -205,7 +207,7 @@ class _StoreProfilePageState extends State<StoreProfilePage> {
         await _fetchStoreData();
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('تم حفظ البيانات بنجاح'),
+            content: Text('حدث خطأ أثناء حفظ البيانات'),
           ),
         );
       } catch (e) {
@@ -217,9 +219,9 @@ class _StoreProfilePageState extends State<StoreProfilePage> {
             ),
           );
         });
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('حدث خطأ أثناء حفظ البيانات'),
+      ScaffoldMessenger.of(context).showSnackBar(
+         SnackBar(
+            content: Text('تم حفظ البيانات'),
           ),
         );
         print(e);
@@ -253,11 +255,16 @@ class _StoreProfilePageState extends State<StoreProfilePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('الملف الشخصي'),
+        backgroundColor: KB1,
+         shadowColor: Colors.black87,
+          surfaceTintColor:Colors.green,
+        title: Text('My profile'),foregroundColor: Colors.black,
         actions: [
           IconButton(
             onPressed: () => _logout(),
-            icon: Icon(Icons.logout),
+            icon: Icon(Icons.logout
+            ,color: Colors.black,),
+
           ),
         ],
       ),
@@ -275,9 +282,9 @@ class _StoreProfilePageState extends State<StoreProfilePage> {
                   children: [
                     if (_storeData != null && _storeData!['profile_image'] != null)
                       Padding(
-                        padding: const EdgeInsets.only(bottom: 16.0),
+                        padding: const EdgeInsets.only(bottom: 30.0),
                         child: ClipRRect(
-                          borderRadius: BorderRadius.circular(8.0),
+                          borderRadius: BorderRadius.circular(200.100),
                           child: Image.network(
                             _storeData!['profile_image'],
                             width: double.infinity,
@@ -342,10 +349,10 @@ class _StoreProfilePageState extends State<StoreProfilePage> {
                       Padding(
                         padding: const EdgeInsets.only(top: 16.0),
                         child: ClipRRect(
-                          borderRadius: BorderRadius.circular(8.0),
+                          borderRadius: BorderRadius.circular(200.200),
                           child: Image.file(
                             _imageFile!,
-                            width: double.infinity,
+                            width:  200.200,//double.infinity,
                             height: 200,
                             fit: BoxFit.cover,
                           ),
