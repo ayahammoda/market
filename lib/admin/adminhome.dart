@@ -8,6 +8,8 @@ import 'package:market1/constant.dart';
 import 'package:market1/profilePage.dart';
 import 'package:market1/screens/login_screen.dart';
 
+import '../profilePage.dart';
+
 class adminHome extends StatefulWidget {
   static String id = 'homePageAdmin';
 
