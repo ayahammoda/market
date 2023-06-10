@@ -4,6 +4,7 @@ import 'package:market1/admin/addProduct.dart';
 import 'package:market1/admin/adminhome.dart';
 import 'package:market1/admin/categoryPage.dart';
 import 'package:market1/admin/categorychoice.dart';
+import 'package:market1/admin/managmentProduct.dart';
 import 'package:market1/admin/productPage.dart';
 import 'package:market1/profilePage.dart';
 import 'package:market1/provider/modelHud.dart';
@@ -31,7 +32,7 @@ class MyApp extends StatelessWidget {
       create: (context) => ModelHude(),
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        initialRoute: StoreProfilePage.id,
+        initialRoute: loginscreen.id,
         routes: {
           loginscreen.id: (context) => loginscreen(),
           signupscreen.id: (context) => signupscreen(),
@@ -44,6 +45,7 @@ class MyApp extends StatelessWidget {
           PageHomeUser.id: (context) => const PageHomeUser(),
           CartPage.id: (context) => CartPage(),
           ProductInfo.id:(context)=>ProductInfo(),
+          MangmentProduct.id:(context)=>MangmentProduct(),
         },
       ),
     );

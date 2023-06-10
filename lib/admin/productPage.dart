@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:market1/admin/addProduct.dart';
+import 'package:market1/admin/managmentProduct.dart';
 import 'package:market1/color.dart';
 import 'package:market1/constant.dart';
 import 'package:market1/user/InfoProductPage.dart';
@@ -38,20 +39,24 @@ class _ProductPageState extends State<ProductPage> {
               return Center(child: CircularProgressIndicator());
             }
 
-            return GridView.count(
-              crossAxisCount: 2,
-              children: snapshot.data!.docs.map((DocumentSnapshot document) {
+            return GridView.builder(
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+              ),
+              itemCount: snapshot.data!.docs.length,
+              itemBuilder: (BuildContext context, int index) {
+                DocumentSnapshot document = snapshot.data!.docs[index];
                 Map<String, dynamic> data =
                     document.data() as Map<String, dynamic>;
+
                 return GridTile(
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: GestureDetector(
                       onTap: () {
-                        //TODO go to the next page (page info product)
                         Navigator.pushNamed(
                           context,
-                          ProductInfo.id,
+                          MangmentProduct.id,
                           // arguments: _products[index],
                         );
                       },
@@ -60,7 +65,6 @@ class _ProductPageState extends State<ProductPage> {
                           Positioned.fill(
                             child: Image.network(
                               data[kProductImage],
-                              fit: BoxFit.fill,
                             ),
                           ),
                           Positioned(
@@ -75,9 +79,11 @@ class _ProductPageState extends State<ProductPage> {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text(data[kProductName]),
-                                    Text(data[kProductType]),
-                                    Text(data[kProductPrice].toString()),
+                                    Text('Name' + data[kProductName]),
+                                    Text('Type' + data[kProductType]),
+                                    Text('price' +
+                                        data[kProductPrice].toString() +
+                                        '\$'),
                                   ],
                                 ),
                               ),
@@ -88,7 +94,7 @@ class _ProductPageState extends State<ProductPage> {
                     ),
                   ),
                 );
-              }).toList(),
+              },
             );
           },
         ),
