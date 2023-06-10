@@ -4,10 +4,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:market1/Widget/textfiled.dart';
-
-// import 'package:image_picker/image_picker.dart';
 import 'package:market1/color.dart';
 import 'package:market1/constant.dart';
 
@@ -25,8 +23,25 @@ class _AddProductState extends State<AddProduct> {
   int _price = 0, _quantity = 0;
   String? selectedCate;
 
-  final GlobalKey<FormState> _globalKey = GlobalKey<FormState>();
-  final _storage = FirebaseStorage.instance;
+  // Map<String, dynamic>? _storeData;
+
+  //bool _isLoading = true;
+  //User? _user;
+  final GlobalKey<FormBuilderState> _globalKey = GlobalKey<FormBuilderState>();
+
+  // final FirebaseAuth _auth = FirebaseAuth.instance;
+  //final _storage = FirebaseStorage.instance;
+  //final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  TextEditingController productnameController = TextEditingController();
+  TextEditingController descriptionController = TextEditingController();
+  TextEditingController priceController = TextEditingController();
+  TextEditingController quantityController = TextEditingController();
+  TextEditingController typeController = TextEditingController();
+
+  void initState() {
+    super.initState();
+    //  _getCurrentUser();
+  }
 
   //Future<void> _setData
 
@@ -88,22 +103,24 @@ class _AddProductState extends State<AddProduct> {
           child: ListView(
             // mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              AppTextFiled(
-                icon: Icons.email, hint: 'enter your name',
-                controller: productController,
+             // AppTextFiled(
+             //   icon: Icons.email, hint: 'enter your name',
+              //  controller: productController,
                 // keyboardType: TextInputType.emailAddress,
                 // hintText: "product name...",
                 // validator: (value) => LoginValidator.validateEmail(value),
+
+               myTextField(
+                 controller: productnameController,
+                onclick: () {
+                  (value) => _name = value;
+                },
+                hintText: "product name...",
+                labelText: 'product name',
               ),
-              // myTextField(
-              //   onclick: () {
-              //     (value) => _name = value;
-              //   },
-              //   hintText: "product name...",
-              //   labelText: 'product name',
-              // ),
               SizedBox(height: 10),
               myTextField(
+                controller: typeController,
                 onclick: () {
                   (value) => _type = value;
                 },
@@ -112,6 +129,7 @@ class _AddProductState extends State<AddProduct> {
               ),
               SizedBox(height: 10),
               myTextField(
+                controller: priceController,
                 onclick: () {
                   (value) => _price = value;
                 },
@@ -120,6 +138,7 @@ class _AddProductState extends State<AddProduct> {
               ),
               SizedBox(height: 10),
               myTextField(
+                controller: quantityController,
                 onclick: () {
                   (value) => _quantity = value;
                 },
@@ -128,6 +147,7 @@ class _AddProductState extends State<AddProduct> {
               ),
               SizedBox(height: 10),
               myTextField(
+                controller: descriptionController,
                 onclick: () {
                   (value) => _description = value;
                 },
@@ -156,83 +176,105 @@ class _AddProductState extends State<AddProduct> {
                       });
                       // Handle the onChanged event here.
                     },
-                    value: selectedCate, // Set the default value to null.
+                    value: selectedCate,
+
+                    // Set the default value to null.
                     hint: Text("Select an item"),
-                  );
+
+
+                  ); },
+            ),
+            SizedBox(height: 10),
+            Container(
+              // color: Colors.red,
+              child: GestureDetector(
+                child: Center(
+                    child: Text('ADD IMAGR', style: TextStyle(fontSize: 20))),
+                onTap: () async {
+                  await showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          content: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              ListTile(
+                                title: Text("Gallery"),
+                                onTap: () {
+                                  _pickImageFromGallery();
+                                  Navigator.pop(context);
+                                },
+                              ),
+                              ListTile(
+                                title: Text("Camera"),
+                                onTap: () {
+                                  _pickImageFromCamera();
+                                  Navigator.pop(context);
+                                },
+                              ),
+                            ],
+                          ),
+                        );
+                      });
                 },
               ),
-              SizedBox(height: 10),
-              SizedBox(height: 16.0),
-              Container(
-                color: Colors.red,
-                child: GestureDetector(
-                  child: Text('ADD IMAGR'),
-                  onTap: () async {
-                    await showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return AlertDialog(
-                            content: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                ListTile(
-                                  title: Text("Gallery"),
-                                  onTap: () {
-                                    _pickImageFromGallery();
-                                    Navigator.pop(context);
-                                  },
-                                ),
-                                ListTile(
-                                  title: Text("Camera"),
-                                  onTap: () {
-                                    _pickImageFromCamera();
-                                    Navigator.pop(context);
-                                  },
-                                ),
-                              ],
-                            ),
-                          );
-                        });
-                  },
+            ),
+            SizedBox(height: 10),
+            ElevatedButton(
+                // onPressed: () => _saveData(),
+                style: ElevatedButton.styleFrom(
+                  primary: endc,
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 40, vertical: 15),
+                  textStyle: const TextStyle(fontSize: 20),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30),
+                  ),
                 ),
-              ),
-              ElevatedButton(
                 child: Text(
                   'Add Product',
                   style: TextStyle(
                       color: Colors.white, fontWeight: FontWeight.bold),
                 ),
                 onPressed: () async {
-                  if (_globalKey.currentState!.validate()) {
-                    _globalKey.currentState!.save();
-                    final imgUrl = await uploadImage(_image);
+                  //   if (_globalKey.currentState!.validate()) {
+                  final imgUrl = await uploadImage(_image);
+                  Map<String, dynamic> datastore = {
+                    'productName': productnameController.text,
+                    'Description': descriptionController.text,
+                    'productQuantity': quantityController.text,
+                    'productPrice': priceController.text,
+                    'productType': typeController.text,
+                    'productCategory': selectedCate,
+                    kProductImage: imgUrl,
+                  };
+                  try {
                     FirebaseFirestore.instance
                         .collection(kProductCollection)
-                        .add({
-                      kProductName: _name,
-                      kProductType: _type,
-                      kProductPrice: _price,
-                      kProductQuantity: _quantity,
-                      kProductDescription: _description,
-                      kProductCategory: selectedCate,
-                      kProductImage: imgUrl,
-                    });
+                        .add(datastore);
+                  } catch (e) {
+                    print(e);
                   }
-                },
-              )
-            ],
-          ),
+                  ;
+
+                  //  }
+                }),
+        ]),
         ),
-      ),
-    );
+      ));
+
   }
 
   Widget myTextField({
     required String hintText,
     required String labelText,
     required Function onclick,
+    required final TextEditingController controller,
+    // final String? Function(String?)? validator,
   }) {
     return TextFormField(
+      controller: controller,
+      //  validator: validator,
       onSaved: onclick(),
       decoration: InputDecoration(
         fillColor: startc,

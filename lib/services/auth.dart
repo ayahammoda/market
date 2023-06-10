@@ -33,4 +33,21 @@ class Auth {
   'email':email,
   });
     return  UserCredential;
-}}
+}
+
+
+  // Future<void> addProduct(String price, String name, String description, String type, String quantity) async {
+  //   try {
+  //    // await _auth.signInWithEmailAndPassword(email: email, password: password);
+  //     await FirebaseFirestore.instance.collection('productCollection').add({
+  //       'price': price.trim(),
+  //       'name': name.trim(),
+  //       'description': description.trim(),
+  //       'type': type.trim(),
+  //       'quantity': quantity.trim(),
+  //     });
+  //   } catch (e) {
+  //     print('Error adding product: $e');
+  //   }
+  // }
+}

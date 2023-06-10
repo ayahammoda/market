@@ -41,7 +41,7 @@ class loginscreen extends StatelessWidget {
                           .size
                           .height * 0.2,
                           width:  10,
-                      child: Stack(
+                      child:  const Stack(
                         alignment: Alignment.center,
                         children: <Widget>[
                           Image
@@ -169,6 +169,7 @@ class loginscreen extends StatelessWidget {
     );
   }
 }
+
 
 
 

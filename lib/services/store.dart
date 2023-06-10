@@ -11,9 +11,7 @@ class Store {
     });
   }
 
-  Stream<QuerySnapshot> loaCategory() {
-    return _firestore.collection(kCategoryCollection).snapshots();
-  }
+
 
   addPoduct(Product product) {
     _firestore.collection(kProductCollection).add({
@@ -27,7 +25,5 @@ class Store {
     });
   }
 
-  Stream<QuerySnapshot> loadProducts() {
-    return _firestore.collection(kProductCollection).snapshots();
-  }
+
 }
