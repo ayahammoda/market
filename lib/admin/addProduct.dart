@@ -1,4 +1,3 @@
-
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -7,12 +6,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:market1/Widget/textfiled.dart';
+
 // import 'package:image_picker/image_picker.dart';
 import 'package:market1/color.dart';
 import 'package:market1/constant.dart';
 
 class AddProduct extends StatefulWidget {
   static String id = 'AddProduct03';
+
   const AddProduct({Key? key}) : super(key: key);
 
   @override
@@ -75,6 +76,7 @@ class _AddProductState extends State<AddProduct> {
   }
 
   TextEditingController productController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -103,7 +105,7 @@ class _AddProductState extends State<AddProduct> {
               SizedBox(height: 10),
               myTextField(
                 onclick: () {
-                      (value) => _type = value;
+                  (value) => _type = value;
                 },
                 hintText: "product Type...",
                 labelText: 'product Type',
@@ -111,7 +113,7 @@ class _AddProductState extends State<AddProduct> {
               SizedBox(height: 10),
               myTextField(
                 onclick: () {
-                      (value) => _price = value!;
+                  (value) => _price = value!;
                 },
                 hintText: "product price...",
                 labelText: 'product price',
@@ -119,7 +121,7 @@ class _AddProductState extends State<AddProduct> {
               SizedBox(height: 10),
               myTextField(
                 onclick: () {
-                      (value) => _quantity = value!;
+                  (value) => _quantity = value!;
                 },
                 hintText: "product quantity...",
                 labelText: 'product quantity',
@@ -127,7 +129,7 @@ class _AddProductState extends State<AddProduct> {
               SizedBox(height: 10),
               myTextField(
                 onclick: () {
-                      (value) => _description = value!;
+                  (value) => _description = value!;
                 },
                 hintText: "product discription...",
                 labelText: 'product discription',
@@ -141,21 +143,21 @@ class _AddProductState extends State<AddProduct> {
                   if (!snapshot.hasData) return CircularProgressIndicator();
 
                   List<DropdownMenuItem> items = snapshot.data!.docs.map((doc) {
-                  return DropdownMenuItem(
-                  value: doc.id,
-                  child: Text(doc[kCategoryName]),
-                  );
+                    return DropdownMenuItem(
+                      value: doc.id,
+                      child: Text(doc[kCategoryName]),
+                    );
                   }).toList();
                   return DropdownButton(
-                  items: items,
-                  onChanged: (value) {
-                  setState(() {
-                  selectedCate = value!;
-                  });
-                  // Handle the onChanged event here.
-                  },
-                  value: selectedCate, // Set the default value to null.
-                  hint: Text("Select an item"),
+                    items: items,
+                    onChanged: (value) {
+                      setState(() {
+                        selectedCate = value!;
+                      });
+                      // Handle the onChanged event here.
+                    },
+                    value: selectedCate, // Set the default value to null.
+                    hint: Text("Select an item"),
                   );
                 },
               ),

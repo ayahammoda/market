@@ -113,9 +113,9 @@ import 'package:market1/admin/adminhome.dart';
 
 import 'color.dart';
 
-
 class StoreProfilePage extends StatefulWidget {
   static String id = 'Storeprofilepage';
+
   @override
   _StoreProfilePageState createState() => _StoreProfilePageState();
 }
@@ -124,11 +124,11 @@ class _StoreProfilePageState extends State<StoreProfilePage> {
   final GlobalKey<FormBuilderState> _formKey = GlobalKey<FormBuilderState>();
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  TextEditingController nameMController=TextEditingController();
-  TextEditingController descriptionController=TextEditingController();
-  TextEditingController addressController=TextEditingController();
-  final FirebaseStorage _storage =
-  FirebaseStorage.instanceFor(bucket: 'gs://firebase_project_id.appspot.com');
+  TextEditingController nameMController = TextEditingController();
+  TextEditingController descriptionController = TextEditingController();
+  TextEditingController addressController = TextEditingController();
+  final FirebaseStorage _storage = FirebaseStorage.instanceFor(
+      bucket: 'gs://firebase_project_id.appspot.com');
   User? _user;
   Map<String, dynamic>? _storeData;
   bool _isLoading = true;
@@ -150,19 +150,17 @@ class _StoreProfilePageState extends State<StoreProfilePage> {
   }
 
   Future<void> _fetchStoreData() async {
-    final snapshot = await _firestore
-        .collection('collection_name')
-        .doc(_user!.uid)
-        .get();
+    final snapshot =
+        await _firestore.collection('collection_name').doc(_user!.uid).get();
     if (snapshot.exists) {
       setState(() {
         Map<String, dynamic>? data = snapshot.data();
         print('this is snapshot$data');
         print(data?['store_name']);
-        nameMController.text=data?['store_name'];
-        descriptionController.text=data?['store_description'];
-        addressController.text=data?['store_address'];
-        _storeData =data;
+        nameMController.text = data?['store_name'];
+        descriptionController.text = data?['store_description'];
+        addressController.text = data?['store_address'];
+        _storeData = data;
         _isLoading = false;
       });
     } else {
@@ -177,12 +175,12 @@ class _StoreProfilePageState extends State<StoreProfilePage> {
       setState(() {
         _isLoading = true;
       });
-      Map<String, dynamic> datastore={
-      'store_name': nameMController.text,
-      'store_description': descriptionController.text,
-      'store_address':addressController.text,
+      Map<String, dynamic> datastore = {
+        'store_name': nameMController.text,
+        'store_description': descriptionController.text,
+        'store_address': addressController.text,
       };
-     // final data = _formKey.currentState!.value;
+      // final data = _formKey.currentState!.value;
       try {
         if (_storeData == null) {
           await _firestore
@@ -190,13 +188,13 @@ class _StoreProfilePageState extends State<StoreProfilePage> {
               .doc(_user!.uid)
               .set(datastore);
         } else {
-            await _firestore
+          await _firestore
               .collection('collection_name')
-              .doc(_user!.uid).update(datastore);
+              .doc(_user!.uid)
+              .update(datastore);
         }
         if (_imageFile != null) {
-          final ref =
-          _storage.ref('stores/${_user!.uid}/profile.jpg');
+          final ref = _storage.ref('stores/${_user!.uid}/profile.jpg');
           await ref.putFile(_imageFile!);
         }
         setState(() {
@@ -219,8 +217,8 @@ class _StoreProfilePageState extends State<StoreProfilePage> {
             ),
           );
         });
-      ScaffoldMessenger.of(context).showSnackBar(
-         SnackBar(
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
             content: Text('تم حفظ البيانات'),
           ),
         );
@@ -243,7 +241,7 @@ class _StoreProfilePageState extends State<StoreProfilePage> {
     try {
       await _auth.signOut();
       Navigator.pushNamed(context, adminHome.id);
-    //  Navigator.of(context).pop();
+      //  Navigator.of(context).pop();
     } catch (e) {
       print(e);
     }
@@ -256,132 +254,129 @@ class _StoreProfilePageState extends State<StoreProfilePage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: KB1,
-         shadowColor: Colors.black87,
-          surfaceTintColor:Colors.green,
-        title: Text('My profile'),foregroundColor: Colors.black,
+        shadowColor: Colors.black87,
+        surfaceTintColor: Colors.green,
+        title: Text('My profile'),
+        foregroundColor: Colors.black,
         actions: [
           IconButton(
             onPressed: () => _logout(),
-            icon: Icon(Icons.logout
-            ,color: Colors.black,),
-
+            icon: Icon(
+              Icons.logout,
+              color: Colors.black,
+            ),
           ),
         ],
       ),
       body: _isLoading
           ? Center(child: CircularProgressIndicator())
           : SingleChildScrollView(
-            child: Padding(
-               padding: const EdgeInsets.all(16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                FormBuilder(
-                key: _formKey,
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    if (_storeData != null && _storeData!['profile_image'] != null)
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 30.0),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(200.100),
-                          child: Image.network(
-                            _storeData!['profile_image'],
-                            width: double.infinity,
-                            height: 200,
-                            fit: BoxFit.cover,
+                    FormBuilder(
+                      key: _formKey,
+                      child: Column(
+                        children: [
+                          if (_storeData != null &&
+                              _storeData!['profile_image'] != null)
+                            Padding(
+                              padding: const EdgeInsets.only(bottom: 30.0),
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(200.100),
+                                child: Image.network(
+                                  _storeData!['profile_image'],
+                                  width: double.infinity,
+                                  height: 200,
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                            ),
+                          TextFormField(
+                            controller: nameMController,
+                            decoration: InputDecoration(
+                              hintText: _storeData?['store_name'],
+                              labelText: 'اسم المتجر',
+                            ),
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return 'هذا الحقل مطلوب';
+                              }
+                              if (value!.length > 50) {
+                                return 'يجب أن يكون الحد الأقصى لطول النص 50 حرفًا';
+                              }
+                              return null;
+                            },
                           ),
-                        ),
-                      ),
-
-                      TextFormField(
-                        controller: nameMController,
-                        decoration: InputDecoration(
-                          hintText: _storeData?['store_name'],
-                          labelText: 'اسم المتجر',
-                        ),
-                        validator: (value) {
-                          if (value!.isEmpty) {
-                            return 'هذا الحقل مطلوب';
-                          }
-                          if (value!.length > 50) {
-                            return 'يجب أن يكون الحد الأقصى لطول النص 50 حرفًا';
-                          }
-                          return null;
-                        },
-                      ),
-
-                  TextFormField(
-                    controller: descriptionController,
-                   decoration: InputDecoration(
-                    hintText: _storeData?['store_description'],
-                         labelText: 'وصف المتجر',
-                     ),
-                        validator: (value) {
-                   if (value!.isEmpty) {
-                     return 'هذا الحقل مطلوب';
-                 }
-                  if (value!.length > 250) {
-                      return 'يجب أن يكون الحد الأقصى لطول النص 250 حرفاً';
-                    }
-                     return null;
-                 },
-                 ),
-
-                  TextFormField(
-                  controller: addressController,
-                     decoration: InputDecoration(
-                     hintText: _storeData?['store_address'],
-                      labelText: 'عنوان المتجر',
-                   ),
-                     validator: (value) {
-                     if (value!.isEmpty) {
-                    return 'هذا الحقل مطلوب';
-                 }
-                    if (value.length > 100) {
-                     return 'يجب أن يكون الحد الأقصى لطول النص 100 حرفاً';
-                  }
-                  return null;
-                 },
-                  ),
-
-                    if (_imageFile != null)
-                      Padding(
-                        padding: const EdgeInsets.only(top: 16.0),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(200.200),
-                          child: Image.file(
-                            _imageFile!,
-                            width:  200.200,//double.infinity,
-                            height: 200,
-                            fit: BoxFit.cover,
+                          TextFormField(
+                            controller: descriptionController,
+                            decoration: InputDecoration(
+                              hintText: _storeData?['store_description'],
+                              labelText: 'وصف المتجر',
+                            ),
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return 'هذا الحقل مطلوب';
+                              }
+                              if (value!.length > 250) {
+                                return 'يجب أن يكون الحد الأقصى لطول النص 250 حرفاً';
+                              }
+                              return null;
+                            },
                           ),
-                        ),
+                          TextFormField(
+                            controller: addressController,
+                            decoration: InputDecoration(
+                              hintText: _storeData?['store_address'],
+                              labelText: 'عنوان المتجر',
+                            ),
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return 'هذا الحقل مطلوب';
+                              }
+                              if (value.length > 100) {
+                                return 'يجب أن يكون الحد الأقصى لطول النص 100 حرفاً';
+                              }
+                              return null;
+                            },
+                          ),
+                          if (_imageFile != null)
+                            Padding(
+                              padding: const EdgeInsets.only(top: 16.0),
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(200.200),
+                                child: Image.file(
+                                  _imageFile!,
+                                  width: 200.200, //double.infinity,
+                                  height: 200,
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                            ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              TextButton.icon(
+                                onPressed: () => _pickImage(),
+                                icon: Icon(Icons.photo),
+                                label: Text('تحديد صورة المتجر'),
+                              ),
+                              ElevatedButton.icon(
+                                onPressed: () => _saveData(),
+                                icon: Icon(Icons.save),
+                                label: Text('حفظ البيانات'),
+                              ),
+                            ],
+                          ),
+                        ],
                       ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        TextButton.icon(
-                          onPressed: () => _pickImage(),
-                          icon: Icon(Icons.photo),
-                          label: Text('تحديد صورة المتجر'),
-                        ),
-                        ElevatedButton.icon(
-
-                         onPressed: () => _saveData(),
-                          icon: Icon(Icons.save),
-                          label: Text('حفظ البيانات'),
-
-                        ),
-                      ],
                     ),
                   ],
                 ),
               ),
-            ],
-          ),
-        ),
-      ),
+            ),
     );
   }
 }

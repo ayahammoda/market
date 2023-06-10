@@ -1,8 +1,9 @@
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:market1/admin/adminhome.dart';
 import 'package:market1/color.dart';
 import 'package:market1/constant.dart';
+import 'package:market1/models/category.dart';
 import 'package:market1/services/store.dart';
 
 class CategoryCH extends StatefulWidget {
@@ -16,13 +17,21 @@ class CategoryCH extends StatefulWidget {
 
 class _CategoryCHState extends State<CategoryCH> {
   final GlobalKey<FormState> _globalKey = GlobalKey<FormState>();
-  late String _items;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   String _nameCate = '';
+  String? _categoryName;
+  String? _categoryId;
   final _store = Store();
-  TextEditingController categoryController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
+    final Map<String, dynamic>? args =
+    ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
+    if (args != null) {
+      _categoryId = args?[kcategoryId];
+      _categoryName = args?[kCategoryName];
+    }
+    // Object? cate = ModalRoute.of(context)!.settings.arguments;
     return Scaffold(
       appBar: AppBar(backgroundColor: endc),
       backgroundColor: backgroundColor,
@@ -40,7 +49,7 @@ class _CategoryCHState extends State<CategoryCH> {
                 filled: true,
                 labelText: 'Category Name',
                 labelStyle:
-                    const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                const TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
                 hintText: 'enter category Name here...',
                 enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(100),
@@ -53,68 +62,55 @@ class _CategoryCHState extends State<CategoryCH> {
                     borderSide: const BorderSide(color: Colors.black87)),
               ),
             ),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: endc,
-                foregroundColor: KText,
-              ),
-              onPressed: () {
-                if (_globalKey.currentState!.validate()) {
-                  _globalKey.currentState!.save();
-                  _globalKey.currentState!.reset();
-                  _firestore.collection(kCategoryCollection).add({
-                    kCategoryName: _nameCate,
-                  });
-                }
-                Navigator.pushNamed(context, adminHome.id);
-              },
-              child: Text('ADD'),
+            SizedBox(
+              height: 20,
             ),
             ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: endc,
-                foregroundColor: KText,
-              ),
               onPressed: () async {
                 if (_globalKey.currentState!.validate()) {
                   _globalKey.currentState!.save();
-                  _globalKey.currentState!.reset();
-                  QuerySnapshot snapshot = await FirebaseFirestore.instance
-                      .collection(kCategoryCollection).get();
-                      // .where(kCategoryName, isEqualTo: _nameCate)
-                      // .get();
-                  if (snapshot.docs.isEmpty) {
-                    var cat= await _firestore.collection(kCategoryCollection).where(kCategoryName, isEqualTo: snapshot).get();
-                    if(cat.docs.isNotEmpty){
-                      var categoryId = cat.docs.first.id;
-                    }
-                    print('No matching documents found');
-                  } else {
 
-                    String categoryId = snapshot.docs.first.id;
-                    try {
-
-                      await _firestore
-                          .collection(kCategoryCollection)
-                          .doc(categoryId)
-                          .update({kCategoryName: _nameCate});
-                      print('Category updated successfully!');
-                    } catch (e) {
-                      print('Error updating category: $e');
-                    }
-                  }
-
+                if (_categoryId != null) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                content: Text('Category updated successfully'),
+                backgroundColor: Colors.lightBlueAccent,
+                ),
+                );
+                Navigator.pop(context);
+                await _firestore
+                    .collection(kCategoryCollection)
+                    .doc(_categoryId)
+                    .update({kCategoryName: _nameCate});
+                } else {
+                ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                content: Text('Category added successfully'),
+                backgroundColor: Colors.lightBlueAccent,
+                ),
+                );
+                Navigator.pop(context);
+                await _store.addcategory(Categories(
+                cateName: _nameCate,
+                ));
                 }
-                Navigator.pushNamed(context, adminHome.id);
+              }
               },
-              child: const Text('EDIT'),
+              child: Text(_categoryId != null ? 'Update' : 'ADD'),
+              style: ElevatedButton.styleFrom(
+                primary: endc,
+                padding:
+                const EdgeInsets.symmetric(horizontal: 40, vertical: 15),
+                textStyle: const TextStyle(fontSize: 20),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(30),
+                ),
+              ),
             ),
+            // child: const Text('EDIT'),
           ],
         ),
       ),
     );
   }
 }
-// double price;
-
-// This widget is the root of your application.

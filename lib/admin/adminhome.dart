@@ -8,6 +8,7 @@ import 'package:market1/profilePage.dart';
 
 class adminHome extends StatefulWidget {
   static String id = 'homePageAdmin';
+
   const adminHome({Key? key}) : super(key: key);
 
   @override
@@ -17,6 +18,7 @@ class adminHome extends StatefulWidget {
 class _adminHomeState extends State<adminHome> {
   int _indexBottomBar = 0;
   int _tabBarIndex = 0;
+
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
@@ -68,13 +70,12 @@ class _adminHomeState extends State<adminHome> {
                     _indexBottomBar = index;
                   });
                 },
-                items:  [
+                items: [
                   BottomNavigationBarItem(
                       icon: Icon(Icons.add_business_outlined), label: ""),
                   BottomNavigationBarItem(
                       icon: Icon(Icons.shopping_cart_checkout), label: ""),
-                  BottomNavigationBarItem(
-                      icon: Icon(Icons.person), label: ""),
+                  BottomNavigationBarItem(icon: Icon(Icons.person), label: ""),
                 ],
               ),
               backgroundColor: Color(0xFFB970CE),
@@ -88,42 +89,40 @@ class _adminHomeState extends State<adminHome> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Padding(
-                    padding: EdgeInsets.fromLTRB(size.width * .015,
-                        0, size.width * .60, 0),
+                    padding: EdgeInsets.fromLTRB(
+                        size.width * .015, 0, size.width * .60, 0),
                     child: Text(
                       'MY Store',
                       style: Theme.of(context).textTheme.headline5,
                     ),
                   ),
-            GestureDetector(
-              onTap: () async {
-                String categoryName = 'category name'; // replace with the desired category name
+                  GestureDetector(
+                    onTap: () async {
+                      String categoryName =
+                          'category name'; // replace with the desired category name
 
-                QuerySnapshot snapshot = await FirebaseFirestore.instance
-                    .collection(kCategoryCollection)
-                    .where(kCategoryName, isEqualTo: categoryName)
-                    .get();
+                      QuerySnapshot snapshot = await FirebaseFirestore.instance
+                          .collection(kCategoryCollection)
+                          .where(kCategoryName, isEqualTo: categoryName)
+                          .get();
 
-                if (snapshot.docs.isNotEmpty) {
-                  // loop through the documents in the snapshot to get the category data
-                  for (var doc in snapshot.docs) {
-                    var categoryId = doc.id;
-                    var categoryName = doc[kCategoryName];
-                    // do something with the category data, such as displaying it in a list or updating it
-                  }
-                } else {
-                  print('No matching documents found');
-                }
-              },
-              child: SizedBox(
-
-
-              ),
-                    ),
-               // IconButton(onPressed:(){
-               //   showSearch(context: context, delegate:null);
-               // }
-               //     , icon: const Icon( Icons.search))
+                      if (snapshot.docs.isNotEmpty) {
+                        // loop through the documents in the snapshot to get the category data
+                        for (var doc in snapshot.docs) {
+                          var categoryId = doc.id;
+                          var categoryName = doc[kCategoryName];
+                          // do something with the category data, such as displaying it in a list or updating it
+                        }
+                      } else {
+                        print('No matching documents found');
+                      }
+                    },
+                    child: SizedBox(),
+                  ),
+                  // IconButton(onPressed:(){
+                  //   showSearch(context: context, delegate:null);
+                  // }
+                  //     , icon: const Icon( Icons.search))
                 ],
               ),
             ),
@@ -135,7 +134,7 @@ class _adminHomeState extends State<adminHome> {
 }
 
 List<Widget> _Pages = [
-   TabBarView(
+  TabBarView(
     children: [
       CategoryPage(),
       ProductPage(),
@@ -144,6 +143,7 @@ List<Widget> _Pages = [
   Container(),
   StoreProfilePage(),
 ];
+
 Widget textTab({
   required String text,
   required int tabBarIndex,
@@ -184,5 +184,3 @@ Widget textTab({
 //     throw UnimplementedError();
 //   }
 // }
-
-
