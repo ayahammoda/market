@@ -7,13 +7,12 @@ import 'package:market1/constant.dart';
 
 class CategoryPage extends StatefulWidget {
   static String id = 'categoryPage';
+
   CategoryPage({Key? key}) : super(key: key);
 
   @override
   State<CategoryPage> createState() => _CategoryPageState();
 }
-
-
 
 class _CategoryPageState extends State<CategoryPage> {
   CollectionReference usersRef =
@@ -24,39 +23,41 @@ class _CategoryPageState extends State<CategoryPage> {
     var siz = MediaQuery.of(context).size;
     double fontSizeSelected = siz.width * .055;
     double fontSizeUnSelected = siz.width * .05;
-
     return Scaffold(
       body: StreamBuilder<QuerySnapshot>(
-        stream: usersRef.snapshots(),
-        builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-          if (snapshot.hasError) {
-            return Text('Error: ${snapshot.error}');
-          }
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return CircularProgressIndicator();
-          }
+          stream: usersRef.snapshots(),
+          builder:
+              (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+            if (snapshot.hasError) {
+              return Text('Error: ${snapshot.error}');
+            }
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Center(
+                child: CircularProgressIndicator(),
+              );
+            }
 
-          return GridView(
-            //crossAxisCount: 2,
-
-            gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-              maxCrossAxisExtent: 200,
-              childAspectRatio: 3 / 2,
-              crossAxisSpacing: 20,
-              mainAxisSpacing: 20,
-            ),
-            children: snapshot.data!.docs.map((DocumentSnapshot document) {
-              Map<String, dynamic> data =
-                  document.data() as Map<String, dynamic>;
-              return Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
+            return GridView.builder(
+              gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                maxCrossAxisExtent: 200,
+                childAspectRatio: 3 / 2,
+                crossAxisSpacing: siz.height * .02,
+                mainAxisSpacing: siz.width * .02,
+              ),
+              itemCount: snapshot.data!.docs.length,
+              itemBuilder: (BuildContext context, int index) {
+                final DocumentSnapshot document = snapshot.data!.docs[index];
+                final Map<String, dynamic> data =
+                    document.data() as Map<String, dynamic>;
+                return Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: Stack(
                     children: [
                       Container(
                         width: siz.width,
-                        height: siz.height * .08,
+                        height: siz.height * .09,
                         decoration: BoxDecoration(
-                          gradient: LinearGradient(
+                          gradient: const LinearGradient(
                             colors: [startc, endc],
                             begin: Alignment.topLeft,
                             end: Alignment.bottomRight,
@@ -65,51 +66,79 @@ class _CategoryPageState extends State<CategoryPage> {
                         ),
                         child: GridTile(
                           child: Center(
-                              child: Text(
-                            data[kCategoryName],
-                            style: TextStyle(fontSize: siz.height * .025),
-                          )),
+                            child: Text(
+                              data[kCategoryName],
+                              style: TextStyle(fontSize: siz.height * .025),
+                            ),
+                          ),
                         ),
                       ),
-                      Row(
-                        children: [
-                          SizedBox(width: 60),
-                          GestureDetector(
-                            onTap: () {
-                              document.reference.delete();
-                            },
-                            child: SizedBox(
-                              width: siz.width * .02,
-                              height: siz.height * .03,
-                              child: const Icon(Icons.delete),
+                      Positioned(
+                        bottom: 0,
+                        child: Row(
+                          // crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            SizedBox(width: siz.width * .13),
+                            GestureDetector(
+                              child: SizedBox(
+                                width: siz.width * .03,
+                                height: siz.height * .03,
+                                child: const Icon(Icons.delete),
+                              ),
+                              onTap: () {
+                                showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    var dialogSize =
+                                        MediaQuery.of(context).size;
+                                    return AlertDialog(
+                                      title: const Text('Are you sure?'),
+                                      content: const Text(
+                                          'Do you want to delete this category?'),
+                                      actions: [
+                                        TextButton(
+                                          child: const Text('Cancel'),
+                                          onPressed: () {
+                                            Navigator.pop(context);
+                                          },
+                                        ),
+                                        TextButton(
+                                          child: const Text('Delete'),
+                                          onPressed: () async {
+                                            Navigator.pop(context);
+                                            await document.reference.delete();
+                                          },
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                );
+                              },
                             ),
-                          ),
-                          SizedBox(width: 20),
-                          GestureDetector(
-                            onTap: () {
-                              Navigator.pushNamed(context, CategoryCH.id,
-                                  arguments: {
-                                    kCategoryName: data[kCategoryName],
-                                    kcategoryId: data[document.id]
-                                  });
-                            },
-                            child: SizedBox(
-                              width: siz.width * .02,
-                              height: siz.height * .03,
-                              child: const Icon(Icons.edit),
+                            SizedBox(width: siz.width * .1),
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.pushNamed(context, CategoryCH.id,
+                                    arguments: {
+                                      kcategoryId: document.id,
+                                      kCategoryName: data[kCategoryName],
+                                    });
+                              },
+                              child: SizedBox(
+                                width: siz.width * .03,
+                                height: siz.height * .03,
+                                child: const Icon(Icons.edit),
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ],
-                  ));
-            }).toList(),
-          );
-        },
-      ),
-
-      //TODO here to view category
-
+                  ),
+                );
+              },
+            );
+          }),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.pushNamed(context, CategoryCH.id);
