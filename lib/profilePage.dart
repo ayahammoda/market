@@ -106,10 +106,12 @@ import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:market1/admin/adminhome.dart';
+import 'package:market1/screens/login_screen.dart';
 
 import 'color.dart';
 
@@ -171,6 +173,7 @@ class _StoreProfilePageState extends State<StoreProfilePage> {
   }
 
   Future<void> _saveData() async {
+    final imgUrl = await uploadImage(_imageFile!);
     if (_formKey.currentState!.saveAndValidate()) {
       setState(() {
         _isLoading = true;
@@ -179,6 +182,7 @@ class _StoreProfilePageState extends State<StoreProfilePage> {
         'store_name': nameMController.text,
         'store_description': descriptionController.text,
         'store_address': addressController.text,
+        'store_image':imgUrl,
       };
       // final data = _formKey.currentState!.value;
       try {
@@ -194,6 +198,7 @@ class _StoreProfilePageState extends State<StoreProfilePage> {
               .update(datastore);
         }
         if (_imageFile != null) {
+
           final ref = _storage.ref('stores/${_user!.uid}/profile.jpg');
           await ref.putFile(_imageFile!);
         }
@@ -227,47 +232,74 @@ class _StoreProfilePageState extends State<StoreProfilePage> {
     }
   }
 
-  Future<void> _pickImage() async {
-    final picker = ImagePicker();
-    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
-    if (pickedFile != null) {
+  // Future<void> _pickImage() async {
+  //   final picker = ImagePicker();
+  //   final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+  //   if (pickedFile != null) {
+  //     setState(() {
+  //       _imageFile = File(pickedFile.path);
+  //     });
+  //   }
+  // }
+  Future<void> _pickImageFromGallery() async {
+    try {
+      final pickedFile = await picker.pickImage(source: ImageSource.gallery);
       setState(() {
-        _imageFile = File(pickedFile.path);
+        if (pickedFile != null) {
+          _imageFile = File(pickedFile.path);
+        } else
+          print('noooo2');
       });
+    } on PlatformException {
+      print('noooo2');
     }
   }
-
   void _logout() async {
     try {
       await _auth.signOut();
-      Navigator.pushNamed(context, adminHome.id);
+      Navigator.pushNamed(context, loginscreen.id);
       //  Navigator.of(context).pop();
     } catch (e) {
       print(e);
     }
   }
 
+  // File? _imageFile;
+
   File? _imageFile;
+  final picker = ImagePicker();
+  late Reference _storageReference;
+
+  Future uploadImage(File _image1) async {
+    String url;
+    String imageId = DateTime.now().microsecondsSinceEpoch.toString();
+    Reference ref = FirebaseStorage.instance.ref().child('product$imageId');
+    await ref.putFile(_image1);
+    url = await ref.getDownloadURL();
+    return url;
+  }
+
+
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: KB1,
-        shadowColor: Colors.black87,
-        surfaceTintColor: Colors.green,
-        title: Text('My profile'),
-        foregroundColor: Colors.black,
-        actions: [
-          IconButton(
-            onPressed: () => _logout(),
-            icon: Icon(
-              Icons.logout,
-              color: Colors.black,
-            ),
-          ),
-        ],
-      ),
+      // appBar: AppBar(
+      //   backgroundColor: KB1,
+      //   shadowColor: Colors.black87,
+      //   surfaceTintColor: Colors.green,
+      //   title: Text('My profile'),
+      //   foregroundColor: Colors.black,
+      //   actions: [
+      //     IconButton(
+      //       onPressed: () => _logout(),
+      //       icon: Icon(
+      //         Icons.logout,
+      //         color: Colors.black,
+      //       ),
+      //     ),
+      //   ],
+      // ),
       body: _isLoading
           ? Center(child: CircularProgressIndicator())
           : SingleChildScrollView(
@@ -359,7 +391,7 @@ class _StoreProfilePageState extends State<StoreProfilePage> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               TextButton.icon(
-                                onPressed: () => _pickImage(),
+                                onPressed: () => _pickImageFromGallery(),
                                 icon: Icon(Icons.photo),
                                 label: Text('تحديد صورة المتجر'),
                               ),

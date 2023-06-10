@@ -98,7 +98,7 @@ class loginscreen extends StatelessWidget {
                             _globalKey.currentState!.save();
                             try {
                                   if( emailController.text == 'aya200@gmail.com'){
-                                  Navigator.pushNamed(context, StoreProfilePage.id);
+                                  Navigator.pushNamed(context, adminHome.id);
                                 }
                                   else Navigator.pushNamed(context, PageHomeUser .id);
                         ;

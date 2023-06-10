@@ -1,10 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:market1/admin/categoryPage.dart';
 import 'package:market1/admin/productPage.dart';
 import 'package:market1/color.dart';
 import 'package:market1/constant.dart';
 import 'package:market1/profilePage.dart';
+import 'package:market1/screens/login_screen.dart';
 
 class adminHome extends StatefulWidget {
   static String id = 'homePageAdmin';
@@ -18,6 +20,16 @@ class adminHome extends StatefulWidget {
 class _adminHomeState extends State<adminHome> {
   int _indexBottomBar = 0;
   int _tabBarIndex = 0;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  void _logout() async {
+    try {
+      await _auth.signOut();
+      Navigator.pushNamed(context, loginscreen.id);
+      //  Navigator.of(context).pop();
+    } catch (e) {
+      print(e);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -60,7 +72,22 @@ class _adminHomeState extends State<adminHome> {
                         ],
                       ),
                     )
-                  : AppBar(),
+                  : AppBar(
+              backgroundColor: KB1,
+              shadowColor: Colors.black87,
+              surfaceTintColor: Colors.green,
+              title: Text('My profile'),
+              foregroundColor: Colors.black,
+              actions: [
+                IconButton(
+                  onPressed: () => _logout(),
+                  icon: Icon(
+                    Icons.logout,
+                    color: Colors.black,
+                  ),
+                ),
+              ],
+            ),
               bottomNavigationBar: BottomNavigationBar(
                 selectedItemColor: KB1,
                 unselectedItemColor: KText,
@@ -82,9 +109,10 @@ class _adminHomeState extends State<adminHome> {
               body: _Pages[_indexBottomBar],
             ),
           ),
+          _indexBottomBar==0 ||_indexBottomBar==1 ?
           Material(
             child: Container(
-              height: size.height * .1,
+              height: size.height * .08,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
@@ -117,7 +145,7 @@ class _adminHomeState extends State<adminHome> {
                         print('No matching documents found');
                       }
                     },
-                    child: SizedBox(),
+                    child: Icon(Icons.search),
                   ),
                   // IconButton(onPressed:(){
                   //   showSearch(context: context, delegate:null);
@@ -126,7 +154,7 @@ class _adminHomeState extends State<adminHome> {
                 ],
               ),
             ),
-          )
+          ):Container()
         ],
       ),
     );

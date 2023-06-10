@@ -113,7 +113,7 @@ class _AddProductState extends State<AddProduct> {
               SizedBox(height: 10),
               myTextField(
                 onclick: () {
-                  (value) => _price = value!;
+                  (value) => _price = value;
                 },
                 hintText: "product price...",
                 labelText: 'product price',
@@ -121,7 +121,7 @@ class _AddProductState extends State<AddProduct> {
               SizedBox(height: 10),
               myTextField(
                 onclick: () {
-                  (value) => _quantity = value!;
+                  (value) => _quantity = value;
                 },
                 hintText: "product quantity...",
                 labelText: 'product quantity',
@@ -129,7 +129,7 @@ class _AddProductState extends State<AddProduct> {
               SizedBox(height: 10),
               myTextField(
                 onclick: () {
-                  (value) => _description = value!;
+                  (value) => _description = value;
                 },
                 hintText: "product discription...",
                 labelText: 'product discription',
@@ -152,7 +152,7 @@ class _AddProductState extends State<AddProduct> {
                     items: items,
                     onChanged: (value) {
                       setState(() {
-                        selectedCate = value!;
+                        selectedCate = value;
                       });
                       // Handle the onChanged event here.
                     },
